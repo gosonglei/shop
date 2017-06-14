@@ -1,0 +1,75 @@
+﻿@model IdentitySample.Models.IndexViewModel
+@{
+    ViewBag.Title = "账号管理";
+}
+
+<h2>@ViewBag.Title</h2>
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div class="row">
+    <div class="col-md-8">
+        <p>
+            @if (Model.HasPassword)
+            {
+                @Html.ActionLink("更改密码", "ChangePassword")
+            }
+            else
+            {
+                @Html.ActionLink("新增密码", "SetPassword")
+            }
+        </p>
+        <p>
+            联络电话: @(Model.PhoneNumber ?? "无") [
+            @if (Model.PhoneNumber != null)
+            {
+                @Html.ActionLink("更改联络电话", "AddPhoneNumber")
+                @: &nbsp;|&nbsp;
+                @Html.ActionLink("移除联络电话", "RemovePhoneNumber")
+            }
+            else
+            {
+                @Html.ActionLink("新增联络电话", "AddPhoneNumber")
+            }
+            ]
+        </p>
+        <p>
+            第三方登入 @Model.Logins.Count
+            @Html.ActionLink("[管理]", "ManageLogins")
+        </p>
+        @if (Model.TwoFactor)
+        {
+            <form method="post" action="/Manage/DisableTFA">
+                <p>
+                    双重验证已启用
+                    <input type="submit" value="停用" class="btn btn-default"/>
+                </p>
+            </form>
+        }
+        else
+        {
+            <form method="post" action="/Manage/EnableTFA">
+                <p>
+                    双重验证未启用
+                    <input type="submit" value="启用" class="btn btn-default"/>
+                </p>
+            </form>
+        }
+        @if (Model.BrowserRemembered)
+        {
+            <form method="post" action="/Manage/ForgetBrowser">
+                <p>
+                    浏览器以记住您的双重验证
+                    <input type="submit" value="取消我的验证" class="btn btn-default" />
+                </p>
+            </form>
+        }
+        else
+        {
+            <form method="post" action="/Manage/RememberBrowser">
+                <p>
+                    浏览器尚未记住您的双重验证
+                    <input type="submit" value="记住我的验证" class="btn btn-default"/>
+                </p>
+            </form>
+        }
+    </div>
+</div>

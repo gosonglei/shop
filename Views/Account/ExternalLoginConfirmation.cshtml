@@ -1,0 +1,39 @@
+﻿@model IdentitySample.Models.ExternalLoginConfirmationViewModel
+@{
+    ViewBag.Title = "注册";
+}
+<h2>@ViewBag.Title</h2>
+<h3>已连接您的 @ViewBag.LoginProvider 账号</h3>
+
+@using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <h4></h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        <p class="text-info col-md-10">
+            您成功以 <strong>@ViewBag.LoginProvider</strong> 进行认证！
+
+            请在下方输入您要使用的Email进行登入！
+
+        </p>
+        </div>   
+        <div class="form-group">
+            @Html.LabelFor(m => m.Email, new { @class = "col-md-1 control-label" })
+            <div class="col-md-5">
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-1 col-md-10"> 
+                <input type="submit" class="btn btn-default" value="注册" />
+            </div>
+        </div>
+        }
+
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }

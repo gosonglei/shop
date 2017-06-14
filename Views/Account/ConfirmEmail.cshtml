@@ -1,0 +1,10 @@
+﻿@{
+    ViewBag.Title = "邮箱认证";
+}
+
+<h2>@ViewBag.Title.</h2>
+<div>
+    <p>
+        您的信箱已经认证完毕 @Html.ActionLink("请按此登入", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+    </p>
+</div>

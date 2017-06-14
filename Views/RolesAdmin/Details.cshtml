@@ -1,0 +1,41 @@
+﻿@model Microsoft.AspNet.Identity.EntityFramework.IdentityRole
+
+@{
+    ViewBag.Title = "详细资料";
+}
+
+<h2>详细资料</h2>
+
+<div>
+    <h4>权限</h4>
+    <hr />名称：
+  
+            @Html.DisplayFor(model => model.Name)
+    
+</div>
+<br />
+<h4>此权限下的使用者</h4>
+@if (ViewBag.UserCount == 0)
+{
+    <hr />
+    <p>无使用者</p>
+}
+
+<table class="table">
+
+    @foreach (var item in ViewBag.Users)
+    {
+        <tr>
+            <td>
+                @item.UserName
+            </td>
+        </tr>
+    }
+</table>
+<p>
+    @Html.ActionLink("编辑", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("回到权限管理", "Index")
+</p>
+
+
+

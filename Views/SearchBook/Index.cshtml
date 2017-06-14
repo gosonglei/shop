@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>搜索</h2>
+<div style="text-align:center">
+    <input type="text" name="" id="No" >
+    <!--
+    <button type="button" id="dd">搜索</button>
+    -->
+</div>
+<br />
+<div id="image" style="text-align:center"></div>
+<h4>标签</h4><hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+<div id="tag"></div>
+<h4>作者</h4><hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+<div id="author"></div>
+<h4>概述</h4><hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+<div id="summary"></div>
+<h4>目录</h4><hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+<div id="catalog"></div>
+<h4>笔记</h4><hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+<div id="annotations"></div>
+
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    $("#No").change(function () {
+    	var isbn = $('#No').val();
+    	var url = 'https://api.douban.com/v2/book/search?q=' + isbn + '&count=1';
+    	console.log(url);
+        $.ajax({
+            url: url,
+            type: 'get',
+            cache: true,
+            dataType: 'jsonp',
+            crossDomain: true,
+            jsonp: 'callback',
+            beforeSend:function(){
+            	console.log("dd")
+            	$("#image").html("");//清空里面的数据；
+            	$("#tag").html("");//清空add里面的数据；
+            	$("#author").html("");//清空add里面的数据；
+            	$("#summary").html("");//清空add里面的数据；
+            	$("#catalog").html("");//清空add里面的数据；
+            	$("#annotations").html("");//清空add里面的数据；
+            },
+            success: function (data) {
+                image = '<img  src="' + data.books[0].image + '"/>'
+                $('#image').append(image);
+                $.each(data.books[0].tags, function (i, items) {
+                    tag = '&nbsp;<span>' + items.name + '&nbsp; | </span>';
+                    $('#tag').append(tag);
+                })
+                author = '<span>' + data.books[0].author + '</span>';
+                $('#author').append(author);
+                summary = '<span>' + data.books[0].summary + '</span>';
+                $('#summary').append(summary);
+                catalog = '<span>' + data.books[0].catalog + '</span>';
+                $('#catalog').append(catalog);
+                getAnnotations(data.books[0].id);
+            }
+        });
+    });
+
+    var getAnnotations = function (id) {
+    	var url = 'https://api.douban.com/v2/book/'+id+'/annotations';
+    	 $.ajax({
+            url: url,
+            type: 'get',
+            cache: true,
+            dataType: 'jsonp',
+            crossDomain: true,
+            jsonp: 'callback',
+            success: function (data) {
+				 $.each(data.annotations,function(index,data){
+				     //console.log(data.content);
+                    
+	                annotations = '<h5>'+(index+1)+'、'+ data.content + '</h5></br>';
+                	$('#annotations').append(annotations);
+	            });
+            }
+        });
+    }
+</script>  	
